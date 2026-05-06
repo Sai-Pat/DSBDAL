@@ -1,0 +1,56 @@
+# Step 1: Import libraries
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+# Step 2: Load dataset
+iris = load_iris()
+
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+# Convert target to labels
+df['species'] = df['species'].map({
+    0: 'setosa',
+    1: 'versicolor',
+    2: 'virginica'
+})
+
+print("First 5 rows:")
+print(df.head())
+
+# Step 3: Identify feature types
+print("\nFeature Types:")
+print(df.dtypes)
+
+print("\nNumeric Features:")
+print(df.select_dtypes(include='number').columns)
+
+print("\nCategorical Feature:")
+print(df.select_dtypes(include='object').columns)
+
+# Step 4: Histograms for all numeric features
+df.hist(figsize=(10,8), bins=20, edgecolor='black')
+
+plt.suptitle("Histograms of Iris Features")
+plt.show()
+
+# Step 5: Boxplots for each feature
+plt.figure(figsize=(10,6))
+
+for i, col in enumerate(df.columns[:-1]):
+    plt.subplot(2, 2, i+1)
+    sns.boxplot(y=df[col])
+    plt.title(col)
+
+plt.tight_layout()
+plt.show()
+
+# Step 6: Compare distributions
+plt.figure(figsize=(10,6))
+
+sns.boxplot(x='species', y='sepal length (cm)', data=df)
+plt.title("Sepal Length vs Species")
+
+plt.show()
