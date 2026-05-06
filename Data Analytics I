@@ -1,0 +1,38 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+
+# Step 2: Load dataset from URL
+url = "https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv"
+df = pd.read_csv(url)
+
+print("First 5 rows:")
+print(df.head())
+
+# Step 3: Define features and target
+X = df.drop('medv', axis=1)  # Features
+y = df['medv']               # Target (house price)
+
+# Step 4: Split data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 5: Train Linear Regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Step 6: Predict
+y_pred = model.predict(X_test)
+
+# Step 7: Evaluate model
+
+print("\nModel Evaluation:")
+
+print("Mean Absolute Error (MAE):", metrics.mean_absolute_error(y_test, y_pred))
+print("Mean Squared Error (MSE):", metrics.mean_squared_error(y_test, y_pred))
+print("Root Mean Squared Error (RMSE):", np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+print("R2 Score:", metrics.r2_score(y_test, y_pred))
