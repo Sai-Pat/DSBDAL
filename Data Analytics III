@@ -1,0 +1,53 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+
+# Step 2: Load Iris dataset
+iris = load_iris()
+
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['target'] = iris.target
+
+print("First 5 rows:")
+print(df.head())
+
+# Step 3: Features and target
+X = df.drop('target', axis=1)
+y = df['target']
+
+# Step 4: Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0
+)
+
+# Step 5: Train Naïve Bayes model
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+# Step 6: Predict
+y_pred = model.predict(X_test)
+
+# Step 7: Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+# Step 8: Calculate metrics (for multi-class)
+
+accuracy = np.sum(np.diag(cm)) / np.sum(cm)
+error_rate = 1 - accuracy
+
+print("\nAccuracy:", accuracy)
+print("Error Rate:", error_rate)
+
+# Precision & Recall (class-wise)
+precision = np.diag(cm) / np.sum(cm, axis=0)
+recall = np.diag(cm) / np.sum(cm, axis=1)
+
+print("\nPrecision (per class):", precision)
+print("Recall (per class):", recall)
