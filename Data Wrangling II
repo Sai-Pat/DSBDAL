@@ -1,0 +1,74 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+
+# Step 2: Create academic dataset
+data = {
+    'Name': ['Amit', 'Sneha', 'Ravi', 'Priya', 'Karan', 'Neha', 'Rahul'],
+    'Marks': [85, 90, np.nan, 105, 40, -10, 75],
+    'Attendance': [90, 85, 88, np.nan, 95, 80, 300]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Dataset:")
+print(df)
+
+# Step 3: Handle missing values
+
+# Fill missing Marks with mean
+df['Marks'].fillna(df['Marks'].mean(), inplace=True)
+
+# Fill missing Attendance with median
+df['Attendance'].fillna(df['Attendance'].median(), inplace=True)
+
+# Step 4: Handle inconsistencies
+
+# Fix Marks (should be between 0 and 100)
+df['Marks'] = df['Marks'].apply(lambda x: 0 if x < 0 else (100 if x > 100 else x))
+
+# Fix Attendance (0–100%)
+df['Attendance'] = df['Attendance'].apply(lambda x: 100 if x > 100 else x)
+
+print("\nAfter Cleaning:")
+print(df)
+
+# Step 5: Detect outliers using IQR
+
+Q1 = df['Marks'].quantile(0.25)
+Q3 = df['Marks'].quantile(0.75)
+IQR = Q3 - Q1
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+outliers = df[(df['Marks'] < lower_bound) | (df['Marks'] > upper_bound)]
+
+print("\nOutliers (IQR method):")
+print(outliers)
+
+# Step 6: Z-score method
+
+mean = df['Marks'].mean()
+std = df['Marks'].std()
+
+df['Z_score'] = (df['Marks'] - mean) / std
+
+z_outliers = df[np.abs(df['Z_score']) > 3]
+
+print("\nOutliers (Z-score method):")
+print(z_outliers)
+
+# Step 7: Data Transformation
+
+# Log transformation
+df['Log_Marks'] = np.log(df['Marks'] + 1)
+
+# Normalization (Min-Max Scaling)
+df['Normalized_Marks'] = (df['Marks'] - df['Marks'].min()) / (df['Marks'].max() - df['Marks'].min())
+
+# Standardization (Z-score scaling)
+df['Standardized_Marks'] = (df['Marks'] - df['Marks'].mean()) / df['Marks'].std()
+
+print("\nFinal Dataset with Transformations:")
+print(df)
