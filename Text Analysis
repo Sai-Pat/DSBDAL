@@ -1,0 +1,56 @@
+# Step 1: Import libraries
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Download required resources (run once)
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+
+# Sample text
+text = "Data analytics is the process of analyzing data to find useful information."
+
+# Step 2: Tokenization
+tokens = word_tokenize(text)
+print("Tokens:", tokens)
+
+# Step 3: POS Tagging
+pos_tags = pos_tag(tokens)
+print("\nPOS Tags:", pos_tags)
+
+# Step 4: Stopword Removal
+stop_words = set(stopwords.words('english'))
+filtered_words = [word for word in tokens if word.lower() not in stop_words]
+print("\nAfter Stopword Removal:", filtered_words)
+
+# Step 5: Stemming
+stemmer = PorterStemmer()
+stemmed_words = [stemmer.stem(word) for word in filtered_words]
+print("\nStemmed Words:", stemmed_words)
+
+# Step 6: Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_words]
+print("\nLemmatized Words:", lemmatized_words)
+
+# Step 7: TF-IDF
+
+documents = [
+    "Data analytics is useful",
+    "Data science and analytics are related fields",
+    "Machine learning uses data"
+]
+
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(documents)
+
+print("\nTF-IDF Feature Names:")
+print(vectorizer.get_feature_names_out())
+
+print("\nTF-IDF Matrix:")
+print(tfidf_matrix.toarray())
