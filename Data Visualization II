@@ -1,0 +1,36 @@
+# Step 1: Import libraries
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Step 2: Load dataset
+df = sns.load_dataset('titanic')
+
+print("First 5 rows:")
+print(df.head())
+
+# Step 3: Boxplot for Age (outlier detection)
+plt.figure(figsize=(8,5))
+sns.boxplot(y=df['age'])
+
+plt.title("Boxplot of Age")
+plt.ylabel("Age")
+
+plt.show()
+
+
+# Step 4: Age vs Gender vs Survival
+plt.figure(figsize=(8,5))
+
+sns.boxplot(
+    x='sex',
+    y='age',
+    hue='survived',
+    data=df
+)
+
+plt.title("Age vs Gender vs Survival")
+plt.xlabel("Gender")
+plt.ylabel("Age")
+
+plt.show()
