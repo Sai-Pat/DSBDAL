@@ -1,0 +1,58 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+
+# Step 2: Load Iris dataset
+iris = load_iris()
+
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+# Convert numeric species to names
+df['species'] = df['species'].map({
+    0: 'setosa',
+    1: 'versicolor',
+    2: 'virginica'
+})
+
+print("First 5 rows:")
+print(df.head())
+
+# Step 3: Basic statistics
+
+print("\nMean:")
+print(df.mean(numeric_only=True))
+
+print("\nMedian:")
+print(df.median(numeric_only=True))
+
+print("\nMinimum values:")
+print(df.min(numeric_only=True))
+
+print("\nMaximum values:")
+print(df.max(numeric_only=True))
+
+print("\nVariance:")
+print(df.var(numeric_only=True))
+
+print("\nStandard Deviation:")
+print(df.std(numeric_only=True))
+
+# Step 4: Group by categorical variable (species)
+
+grouped = df.groupby('species')
+
+print("\nMean values by species:")
+print(grouped.mean())
+
+print("\nMedian values by species:")
+print(grouped.median())
+
+print("\nStandard deviation by species:")
+print(grouped.std())
+
+# Step 5: Species-wise comparison (summary)
+
+print("\nSpecies-wise statistical summary:")
+print(grouped.describe())
